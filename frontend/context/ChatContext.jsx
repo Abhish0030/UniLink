@@ -13,27 +13,14 @@ export const ChatProvider = ({ children }) => {
     const [conversations, setConversations] = useState([]);
     const [activeChat, setActiveChat] = useState(null); // The user we are chatting with
 
-    useEffect(() => {
-        if (user) {
-            const newSocket = io(getBackendOrigin(), {
-                withCredentials: true,
-            });
-            setSocket(newSocket);
-
-            newSocket.emit('join', user._id);
-
-            newSocket.on('getMessage', (message) => {
-                // If the message is from the user we are currently chatting with, add it to the messages
-                if (activeChat && (message.sender === activeChat._id || message.receiver === activeChat._id)) {
-                    setMessages((prev) => [...prev, message]);
-                }
-                // Refresh conversations list to show latest message/user
-                fetchConversations();
-            });
-
-            return () => newSocket.close();
-        }
-    }, [user, activeChat]);
+    const appendMessage = useCallback((message) => {
+        setMessages((prev) => {
+            if (prev.some((item) => item._id === message._id)) {
+                return prev;
+            }
+            return [...prev, message];
+        });
+    }, []);
 
     const fetchMessages = useCallback(async (userId) => {
         try {
@@ -53,27 +40,55 @@ export const ChatProvider = ({ children }) => {
         }
     }, []);
 
-    const sendMessage = (receiverId, text) => {
-        if (socket && user) {
-            const messageData = {
-                senderId: user._id,
-                receiverId,
-                text,
-            };
-            socket.emit('sendMessage', messageData);
-            
-            // Optimistically add to messages
-            const optimisticMsg = {
-                _id: Date.now().toString(),
-                sender: user._id,
-                receiver: receiverId,
-                text,
-                createdAt: new Date().toISOString(),
-            };
-            setMessages((prev) => [...prev, optimisticMsg]);
-            fetchConversations();
+    const sendMessage = useCallback(async ({ receiverId, text = '', imageFile = null, videoFile = null }) => {
+        if (!user || !receiverId) {
+            return null;
         }
-    };
+
+        const formData = new FormData();
+        formData.append('receiverId', receiverId);
+        if (text.trim()) {
+            formData.append('text', text.trim());
+        }
+        if (imageFile) {
+            formData.append('image', imageFile);
+        }
+        if (videoFile) {
+            formData.append('video', videoFile);
+        }
+
+        const { data } = await api.post('/chat', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+
+        appendMessage(data);
+        fetchConversations();
+        return data;
+    }, [appendMessage, fetchConversations, user]);
+
+    useEffect(() => {
+        if (user) {
+            const newSocket = io(getBackendOrigin(), {
+                withCredentials: true,
+            });
+            setSocket(newSocket);
+
+            newSocket.emit('join', user._id);
+
+            newSocket.on('getMessage', (message) => {
+                // If the message is from the user we are currently chatting with, add it to the messages
+                if (activeChat && (message.sender === activeChat._id || message.receiver === activeChat._id)) {
+                    appendMessage(message);
+                }
+                // Refresh conversations list to show latest message/user
+                fetchConversations();
+            });
+
+            return () => newSocket.close();
+        }
+    }, [appendMessage, fetchConversations, user]);
 
     return (
         <ChatContext.Provider

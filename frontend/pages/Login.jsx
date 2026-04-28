@@ -4,6 +4,7 @@ import { ArrowRight, Compass, Eye, EyeOff, Lock, LogIn, Mail, Sparkles } from 'l
 import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
 import { useAuth } from '../context/AuthContext';
+import brandLogo from '../assets/unilink-lamp.svg';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -79,8 +80,8 @@ const Login = () => {
 
         <section className="glass-card p-8 sm:p-10 lg:p-12 flex flex-col justify-center">
           <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }}>
-            <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-panel text-primary shadow-[0_14px_28px_rgba(31,41,55,0.07)]">
-              <Compass size={24} />
+            <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-panel text-primary shadow-[0_14px_28px_rgba(31,41,55,0.07)] overflow-hidden border border-border/70">
+              <img src={brandLogo} alt="UniLink logo" className="h-11 w-11 object-contain" />
             </div>
             <h2 className="mt-6 text-3xl sm:text-4xl font-extrabold tracking-tight text-ink">Welcome back</h2>
             <p className="mt-3 text-sm sm:text-base font-semibold text-muted leading-7">

@@ -4,6 +4,7 @@ import { Bell, LogOut, Shield } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import SearchBar from './SearchBar';
 import { getAvatarUrl } from '../services/media';
+import brandLogo from '../assets/unilink-lamp.svg';
 
 const Navbar = () => {
   const { user, logout, isAuthenticated } = useAuth();
@@ -13,8 +14,8 @@ const Navbar = () => {
       <div className="w-full max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12">
         <div className="h-20 grid grid-cols-[auto_1fr_auto] items-center gap-4 lg:gap-8">
           <Link to="/" className="flex items-center gap-3 min-w-0">
-            <div className="w-12 h-12 rounded-2xl bg-button text-white flex items-center justify-center shadow-[0_14px_28px_rgba(166,123,91,0.28)]">
-              <span className="text-2xl font-extrabold tracking-tight">U</span>
+            <div className="w-12 h-12 rounded-2xl bg-surface text-white flex items-center justify-center shadow-[0_14px_28px_rgba(166,123,91,0.18)] border border-border/80 overflow-hidden">
+              <img src={brandLogo} alt="UniLink logo" className="h-10 w-10 object-contain" />
             </div>
             <div className="hidden sm:block min-w-0">
               <p className="text-[11px] uppercase tracking-[0.26em] text-accent/70 font-extrabold">Student Network</p>

@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
 import { Mail, Lock, Shield, ArrowLeft, Eye, EyeOff } from 'lucide-react';
 import { motion } from 'framer-motion';
+import brandLogo from '../assets/unilink-lamp.svg';
 
 const AdminLogin = () => {
   const [email, setEmail] = useState('');
@@ -65,7 +66,9 @@ const AdminLogin = () => {
               transition={{ duration: 40, repeat: Infinity, ease: 'linear' }}
               className="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-3xl"
             />
-            <Shield size={52} className="mb-4 drop-shadow-xl" />
+            <div className="mb-4 rounded-[28px] bg-white/92 p-3 shadow-xl">
+              <img src={brandLogo} alt="UniLink logo" className="h-16 w-16 object-contain" />
+            </div>
             <h1 className="text-4xl font-black drop-shadow-sm">Admin Portal</h1>
             <p className="text-white/90 font-medium text-sm mt-1">UniLink Administration</p>
           </div>
