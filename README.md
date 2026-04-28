@@ -1,11 +1,10 @@
-````md
 # 🎓 UniLink
 
 **Smart Campus Social & Communication Platform for Students**
 
 > *Built using MERN Stack with JWT Authentication & Tailwind CSS*
 
-![UniLink Banner](docs/images/unilink-banner.png)
+<img src="docs/images/unilink-banner.png" alt="UniLink Banner" width="100%" />
 
 ---
 
@@ -31,7 +30,7 @@ MongoDB Atlas Database
         │
         ▼
 Cloudinary Image Storage
-````
+```
 
 ---
 
@@ -212,5 +211,3 @@ If you like this project, give it a ⭐ on GitHub.
 
 **UniLink — Connect. Collaborate. Grow.**
 
-```
-```
