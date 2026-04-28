@@ -4,6 +4,8 @@
 
 > *Built using MERN Stack with JWT Authentication & Tailwind CSS*
 
+**Live App:** [https://uniink.netlify.app/](https://uniink.netlify.app/)
+
 <img src="docs/images/unilink-banner.png" alt="UniLink Banner" width="100%" />
 
 ---
@@ -143,6 +145,8 @@ VITE_API_URL=https://your-backend.onrender.com
 ---
 
 ## 🌐 Deployment
+
+**Production URL:** [https://uniink.netlify.app/](https://uniink.netlify.app/)
 
 ### Frontend:
 
