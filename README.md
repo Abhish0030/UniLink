@@ -5,13 +5,11 @@
 
 > *Built using MERN Stack with JWT Authentication & Tailwind CSS*
 
-<img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/89156d93-dfc6-4fc0-a4cf-4d7858361d29" />
-
+![UniLink Banner](docs/images/unilink-banner.png)
 
 ---
 
 ## 📌 What is UniLink?
-
 UniLink is a modern **student networking and campus communication platform** designed to connect university students in one place. It helps students interact, share updates, create profiles, build communities, and stay informed about campus activities.
 
 Students can sign up, log in securely, create posts, upload profile images, send messages, and connect with other students in real time.
