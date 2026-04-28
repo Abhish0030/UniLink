@@ -41,6 +41,7 @@ const ImageCropModal = ({ config, onCancel, onComplete }) => {
 
   const aspect = config.aspect || 1;
   const cropShape = config.cropShape || 'rect';
+  const fit = config.fit || 'cover';
 
   const handleApply = async () => {
     setIsApplying(true);
@@ -50,6 +51,7 @@ const ImageCropModal = ({ config, onCancel, onComplete }) => {
         offsetX,
         offsetY,
         aspect,
+        fit,
         outputWidth: config.outputWidth,
         outputType: config.outputType || config.file.type || 'image/jpeg',
         fileName: config.file.name,
@@ -112,7 +114,7 @@ const ImageCropModal = ({ config, onCancel, onComplete }) => {
                     <img
                       src={previewUrl}
                       alt="Crop preview"
-                      className="absolute inset-0 h-full w-full object-cover will-change-transform select-none"
+                      className={`absolute inset-0 h-full w-full will-change-transform select-none ${fit === 'contain' ? 'object-contain' : 'object-cover'}`}
                       style={previewStyle}
                       draggable="false"
                     />

@@ -26,6 +26,7 @@ export const cropImageFile = async (
     offsetX = 0,
     offsetY = 0,
     aspect = 1,
+    fit = 'cover',
     outputWidth = 1200,
     outputType = file.type || 'image/jpeg',
     quality = 0.92,
@@ -38,12 +39,15 @@ export const cropImageFile = async (
 
   try {
     const image = await loadImage(sourceUrl);
-    const baseScale = Math.max(outputWidth / image.width, outputHeight / image.height);
+    const shouldContain = fit === 'contain';
+    const baseScale = shouldContain
+      ? Math.min(outputWidth / image.width, outputHeight / image.height)
+      : Math.max(outputWidth / image.width, outputHeight / image.height);
     const scale = baseScale * clamp(zoom, 1, 4);
     const scaledWidth = image.width * scale;
     const scaledHeight = image.height * scale;
-    const travelX = Math.max(0, (scaledWidth - outputWidth) / 2);
-    const travelY = Math.max(0, (scaledHeight - outputHeight) / 2);
+    const travelX = Math.abs(scaledWidth - outputWidth) / 2;
+    const travelY = Math.abs(scaledHeight - outputHeight) / 2;
 
     const canvas = document.createElement('canvas');
     canvas.width = outputWidth;

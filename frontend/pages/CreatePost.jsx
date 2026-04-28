@@ -35,8 +35,9 @@ const CreatePost = () => {
                 file,
                 title: 'Crop post image',
                 aspect: 16 / 9,
+                fit: 'contain',
                 outputWidth: 1280,
-                initialZoom: 1.05,
+                initialZoom: 1,
             });
         }
         e.target.value = '';
@@ -142,7 +143,7 @@ const CreatePost = () => {
                             >
                                 {imagePreview && (
                                     <div className="relative group/preview rounded-[24px] overflow-hidden border-2 border-zinc-100 shadow-lg aspect-video max-h-64 mx-auto">
-                                        <img src={imagePreview} className="w-full h-full object-cover transition-transform group-hover/preview:scale-105 duration-700" alt="Preview" />
+                                        <img src={imagePreview} className="w-full h-full object-contain bg-surface transition-transform group-hover/preview:scale-105 duration-700" alt="Preview" />
                                         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/preview:opacity-100 transition-opacity flex items-center justify-center gap-3">
                                             <button 
                                                 type="button"
@@ -150,8 +151,9 @@ const CreatePost = () => {
                                                     file: imageFile,
                                                     title: 'Re-crop post image',
                                                     aspect: 16 / 9,
+                                                    fit: 'contain',
                                                     outputWidth: 1280,
-                                                    initialZoom: 1.05,
+                                                    initialZoom: 1,
                                                 })}
                                                 className="px-4 py-2 bg-white text-ink rounded-full shadow-2xl hover:bg-panel transition-all transform hover:scale-105 active:scale-95 text-xs font-black uppercase tracking-widest"
                                             >

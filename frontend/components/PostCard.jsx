@@ -299,7 +299,7 @@ const PostCard = ({ post }) => {
                 <img 
                     src={resolveMediaUrl(post.image)} 
                     alt="Post content" 
-                    className="w-full h-full object-cover"
+                    className="w-full max-h-[500px] object-contain bg-surface"
                 />
             </div>
         )}
