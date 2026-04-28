@@ -9,7 +9,7 @@ import api from '../services/api';
 const Avatar = ({ src, name }) =>
     src
         ? <img src={src} alt={name} className="w-9 h-9 rounded-full object-cover ring-2 ring-primary/30" />
-        : <div className="w-9 h-9 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+        : <div className="w-9 h-9 rounded-full bg-primary flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
             {name?.[0]?.toUpperCase() || '?'}
           </div>;
 
@@ -66,7 +66,7 @@ const ConfirmModal = ({ message, onConfirm, onCancel }) => (
                 </button>
                 <button
                     onClick={onConfirm}
-                    className="px-4 py-3 rounded-2xl bg-gradient-to-r from-red-500 to-rose-600 text-white text-sm font-bold shadow-lg shadow-red-500/25 hover:shadow-red-500/40 transition-all active:scale-95"
+                    className="px-4 py-3 rounded-2xl bg-red-500 text-white text-sm font-bold shadow-lg shadow-red-500/25 hover:bg-red-600 hover:shadow-red-500/40 transition-all active:scale-95"
                 >
                     Confirm Delete
                 </button>

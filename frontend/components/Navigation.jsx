@@ -27,7 +27,7 @@ const Navigation = () => {
               [
                 'group relative flex items-center gap-3 rounded-2xl px-3 py-3 transition-all duration-200',
                 isActive
-                  ? 'bg-[linear-gradient(135deg,rgba(201,107,28,0.14),rgba(201,107,28,0.08))] text-ink ring-1 ring-primary/20 shadow-[0_12px_24px_rgba(31,41,55,0.06)]'
+                  ? 'bg-primary/12 text-ink ring-1 ring-primary/20 shadow-[0_12px_24px_rgba(31,41,55,0.06)]'
                   : 'text-ink/66 hover:bg-white/70 hover:text-ink',
               ].join(' ')
             }

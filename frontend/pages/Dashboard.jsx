@@ -147,7 +147,7 @@ const Dashboard = () => {
             animate={{ opacity: 1, y: 0 }}
             className="glass-card p-6 sm:p-7 lg:p-8 mb-6 overflow-hidden relative"
           >
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(15,118,110,0.1),transparent_24%),radial-gradient(circle_at_bottom_left,rgba(201,107,28,0.12),transparent_24%)] pointer-events-none" />
+            <div className="absolute inset-0 bg-panel/45 pointer-events-none" />
             <div className="relative flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
               <div className="min-w-0">
                 <div className="inline-flex items-center gap-2 rounded-full border border-accent/15 bg-accent/8 px-3 py-1.5 text-[11px] uppercase tracking-[0.2em] font-extrabold text-accent mb-4">

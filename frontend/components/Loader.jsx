@@ -13,10 +13,10 @@ const Loader = ({ fullPage = false }) => {
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 1.1, repeat: Infinity, ease: 'linear' }}
-          className="relative h-11 w-11 rounded-2xl bg-[linear-gradient(135deg,#db7a26_0%,#0f766e_100%)] shadow-[0_14px_28px_rgba(31,41,55,0.14)]"
+          className="relative h-11 w-11 rounded-2xl bg-button shadow-[0_14px_28px_rgba(31,41,55,0.14)]"
         >
           <div className="absolute inset-[3px] rounded-[13px] bg-surface/90" />
-          <div className="absolute inset-[10px] rounded-lg bg-[linear-gradient(135deg,#db7a26_0%,#0f766e_100%)]" />
+          <div className="absolute inset-[10px] rounded-lg bg-button/75" />
         </motion.div>
         <div>
           <p className="text-xs uppercase tracking-[0.24em] font-extrabold text-muted">Loading</p>

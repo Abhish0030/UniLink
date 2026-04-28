@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, MessageCircle, Share2, MoreHorizontal, FileText, Download, Send, User, UserPlus, UserMinus, Edit3, Trash2 } from 'lucide-react';
+import { Heart, MessageCircle, Share2, MoreHorizontal, FileText, Download, Send, User, UserPlus, UserMinus, Edit3, Trash2, Play, Pause } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { usePosts } from '../context/PostContext';
@@ -37,6 +37,7 @@ const PostCard = ({ post }) => {
     const [showMenu, setShowMenu] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [editedText, setEditedText] = useState(post.text || '');
+    const [isVideoPlaying, setIsVideoPlaying] = useState(false);
 
     const handleShare = () => {
         const postUrl = `${window.location.origin}/post/${post._id}`;
@@ -53,6 +54,7 @@ const PostCard = ({ post }) => {
     }, [currentUser?.following]);
 
     const menuRef = useRef();
+    const videoRef = useRef(null);
 
     useEffect(() => {
         function handleClickOutside(event) {
@@ -113,6 +115,15 @@ const PostCard = ({ post }) => {
     
     await addComment(post._id, commentText, currentUser);
     setCommentText('');
+  };
+
+  const toggleVideoPlayback = () => {
+    if (!videoRef.current) return;
+    if (videoRef.current.paused) {
+      videoRef.current.play();
+      return;
+    }
+    videoRef.current.pause();
   };
 
   const formatDate = (dateString) => {
@@ -305,12 +316,33 @@ const PostCard = ({ post }) => {
         )}
 
         {post.video && (
-            <div className="rounded-[24px] overflow-hidden border border-accent/20 bg-surface mt-4 max-h-[500px] shadow-lg relative group/video">
+            <div className="rounded-[24px] overflow-hidden border border-accent/20 bg-surface mt-4 shadow-lg relative group/video">
                 <video 
+                    ref={videoRef}
                     src={resolveMediaUrl(post.video)} 
                     controls 
-                    className="w-full h-full object-contain bg-black/5"
+                    onPlay={() => setIsVideoPlaying(true)}
+                    onPause={() => setIsVideoPlaying(false)}
+                    className="w-full max-h-[500px] object-contain bg-black/5"
                 />
+                <div className="flex items-center justify-between gap-3 border-t border-accent/10 bg-white/75 px-4 py-3">
+                    <button
+                        type="button"
+                        onClick={toggleVideoPlayback}
+                        className="inline-flex items-center gap-2 rounded-xl border border-border/80 bg-surface px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-ink transition-colors hover:bg-panel"
+                    >
+                        {isVideoPlaying ? <Pause size={16} /> : <Play size={16} />}
+                        {isVideoPlaying ? 'Pause' : 'Play'}
+                    </button>
+                    <a
+                        href={resolveMediaUrl(post.video)}
+                        download
+                        className="inline-flex items-center gap-2 rounded-xl bg-button px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-white shadow-lg shadow-button/20 transition-all hover:brightness-105"
+                    >
+                        <Download size={16} />
+                        Download
+                    </a>
+                </div>
             </div>
         )}
 

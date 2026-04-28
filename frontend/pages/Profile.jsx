@@ -408,7 +408,7 @@ const Profile = () => {
               className="w-full h-full object-cover transition-transform duration-700 group-hover/banner:scale-105"
             />
           ) : (
-            <div className="w-full h-full bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 relative overflow-hidden">
+            <div className="w-full h-full bg-button/90 relative overflow-hidden">
               <MotionDiv
                 animate={{ rotate: 360 }}
                 transition={{ duration: 80, repeat: Infinity, ease: 'linear' }}
@@ -509,7 +509,7 @@ const Profile = () => {
               {isOwnProfile && !uploadingProfilePic && (
                 <button
                   onClick={() => profilePicInputRef.current?.click()}
-                  className="absolute bottom-2 right-2 p-2.5 bg-button text-ink rounded-full shadow-2xl ring-4 ring-surface hover:scale-110 active:scale-95 transition-all md:hidden"
+                  className="absolute bottom-2 right-2 p-2.5 bg-button text-white rounded-full shadow-2xl ring-4 ring-surface hover:scale-110 active:scale-95 transition-all md:hidden"
                 >
                   <Camera size={16} />
                 </button>
@@ -518,52 +518,55 @@ const Profile = () => {
 
             {/* Spacer on md+ */}
             <div className="hidden md:flex-1 md:block" />
-
-            {/* Action Buttons */}
-            <div className="flex gap-3 mt-4 md:mt-12 self-center md:self-auto">
-              {!isOwnProfile && (
-                <button
-                  onClick={() => {
-                    setActiveChat(user);
-                    navigate('/messages');
-                  }}
-                  className="px-6 py-3 rounded-2xl font-black shadow-xl transition-all flex items-center gap-2 active:scale-95 text-sm bg-accent/10 text-ink border border-accent/20 hover:bg-accent/20"
-                >
-                  <MessageSquare size={18} />
-                  Message
-                </button>
-              )}
-              {isOwnProfile ? (
-                <button
-                  onClick={() => setIsEditModalOpen(true)}
-                  className="btn-primary px-8 py-3 shadow-xl shadow-button/25 flex items-center gap-2 text-sm font-black tracking-wide"
-                >
-                  <Edit3 size={18} />
-                  Edit Profile
-                </button>
-              ) : (
-                <button
-                  onClick={handleFollow}
-                  className={`px-8 py-3 rounded-2xl font-black shadow-xl transition-all flex items-center gap-2 active:scale-95 text-sm ${isFollowing
-                      ? 'bg-accent/10 text-ink border border-accent/30 hover:bg-red-500/10 hover:text-red-600 hover:border-red-300'
-                      : 'bg-button text-ink shadow-button/20 hover:brightness-105'
-                    }`}
-                >
-                  {isFollowing ? <><UserMinus size={18} /> Unfollow</> : <><UserPlus size={18} /> Follow</>}
-                </button>
-              )}
-            </div>
           </div>
 
           {/* Name & meta */}
           <div className="mt-2">
-            <div className="flex items-center gap-3">
-              <h1 className="text-3xl md:text-4xl font-black text-ink tracking-tight">{user?.name}</h1>
-              {user?.role === 'admin' && (
-                <span className="bg-button/20 text-button text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-lg border border-button/30">Admin</span>
-              )}
+            <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+              <div>
+                <div className="flex items-center gap-3">
+                  <h1 className="text-3xl md:text-4xl font-black text-ink tracking-tight">{user?.name}</h1>
+                  {user?.role === 'admin' && (
+                    <span className="bg-button/20 text-button text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-lg border border-button/30">Admin</span>
+                  )}
+                </div>
+                <p className="text-ink/50 font-bold mt-1 text-sm">{user?.email}</p>
+              </div>
+
+              <div className="flex flex-wrap gap-3 self-start">
+                {!isOwnProfile && (
+                  <button
+                    onClick={() => {
+                      setActiveChat(user);
+                      navigate('/messages');
+                    }}
+                    className="px-6 py-3 rounded-2xl font-black shadow-xl transition-all flex items-center gap-2 active:scale-95 text-sm bg-accent/10 text-ink border border-accent/20 hover:bg-accent/20"
+                  >
+                    <MessageSquare size={18} />
+                    Message
+                  </button>
+                )}
+                {isOwnProfile ? (
+                  <button
+                    onClick={() => setIsEditModalOpen(true)}
+                    className="btn-primary px-8 py-3 shadow-xl shadow-button/25 flex items-center gap-2 text-sm font-black tracking-wide"
+                  >
+                    <Edit3 size={18} />
+                    Edit Profile
+                  </button>
+                ) : (
+                  <button
+                    onClick={handleFollow}
+                    className={`px-8 py-3 rounded-2xl font-black shadow-xl transition-all flex items-center gap-2 active:scale-95 text-sm ${isFollowing
+                        ? 'bg-accent/10 text-ink border border-accent/30 hover:bg-red-500/10 hover:text-red-600 hover:border-red-300'
+                        : 'bg-button text-white shadow-button/20 hover:brightness-105'
+                      }`}
+                  >
+                    {isFollowing ? <><UserMinus size={18} /> Unfollow</> : <><UserPlus size={18} /> Follow</>}
+                  </button>
+                )}
+              </div>
             </div>
-            <p className="text-ink/50 font-bold mt-1 text-sm">{user?.email}</p>
 
             {/* Bio */}
             {user?.bio ? (
@@ -732,7 +735,7 @@ const Profile = () => {
                     className="min-w-[200px] max-w-[240px] flex-1 snap-start flex flex-col items-center gap-4 p-6 rounded-[3rem] bg-white border border-primary/5 shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all relative group"
                   >
                   <Link to={`/profile/${rec._id}`} className="flex flex-col items-center gap-4 w-full">
-                    <div className="relative p-1 rounded-full bg-gradient-to-tr from-primary to-primary/20">
+                    <div className="relative p-1 rounded-full bg-primary/20">
                       <img
                         src={getProfilePicUrl(rec)}
                         alt={rec.name}
@@ -1070,7 +1073,7 @@ const Profile = () => {
                           onClick={() => handleModalFollow(socialUser)}
                           className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all active:scale-95 ${followingState[socialUser._id]
                               ? 'bg-accent/10 text-ink border border-accent/20'
-                              : 'bg-button text-ink shadow-lg shadow-button/20'
+                              : 'bg-button text-white shadow-lg shadow-button/20'
                             }`}
                         >
                           {followingState[socialUser._id] ? 'Following' : 'Follow'}

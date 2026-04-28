@@ -59,7 +59,7 @@ const AdminLogin = () => {
       <div className="w-full max-w-md">
         <div className="glass-card overflow-hidden">
           {/* Header Banner */}
-          <div className="bg-gradient-to-br from-button to-accent p-12 flex flex-col items-center justify-center text-white relative overflow-hidden">
+          <div className="bg-button p-12 flex flex-col items-center justify-center text-white relative overflow-hidden">
             <MotionDiv
               animate={{ rotate: 360 }}
               transition={{ duration: 40, repeat: Infinity, ease: 'linear' }}

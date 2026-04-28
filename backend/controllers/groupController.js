@@ -114,4 +114,43 @@ const getGroupPosts = asyncHandler(async (req, res) => {
     res.json(posts);
 });
 
-export { createGroup, getGroups, joinGroup, getGroupPosts, getGroupById };
+// @desc    Update group image
+// @route   PUT /api/groups/:id/image
+// @access  Private
+const updateGroupImage = asyncHandler(async (req, res) => {
+    const filePath = req.file?.path;
+    try {
+        const group = await Group.findById(req.params.id);
+
+        if (!group) {
+            cleanupFile(filePath);
+            res.status(404);
+            throw new Error('Group not found');
+        }
+
+        if (group.creator.toString() !== req.user._id.toString()) {
+            cleanupFile(filePath);
+            return res.status(403).json({ message: 'Only the group creator can update the community avatar' });
+        }
+
+        if (!req.file) {
+            return res.status(400).json({ message: 'No image file provided' });
+        }
+
+        const result = await cloudinary.uploader.upload(filePath, {
+            folder: 'unilink/groups',
+            resource_type: 'auto',
+        });
+
+        group.image = result.secure_url;
+        await group.save();
+        cleanupFile(filePath);
+
+        res.json({ image: group.image, group });
+    } catch (error) {
+        cleanupFile(filePath);
+        res.status(res.statusCode >= 400 ? res.statusCode : 500).json({ message: error.message });
+    }
+});
+
+export { createGroup, getGroups, joinGroup, getGroupPosts, getGroupById, updateGroupImage };

@@ -13,7 +13,7 @@ const Navbar = () => {
       <div className="w-full max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12">
         <div className="h-20 grid grid-cols-[auto_1fr_auto] items-center gap-4 lg:gap-8">
           <Link to="/" className="flex items-center gap-3 min-w-0">
-            <div className="w-12 h-12 rounded-2xl bg-[linear-gradient(135deg,#db7a26_0%,#b75f19_100%)] text-white flex items-center justify-center shadow-[0_14px_28px_rgba(201,107,28,0.28)]">
+            <div className="w-12 h-12 rounded-2xl bg-button text-white flex items-center justify-center shadow-[0_14px_28px_rgba(166,123,91,0.28)]">
               <span className="text-2xl font-extrabold tracking-tight">U</span>
             </div>
             <div className="hidden sm:block min-w-0">

@@ -1,12 +1,13 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import api from '../services/api';
-import { Users, Info, Calendar, MessageSquare, Plus, UserPlus, Check } from 'lucide-react';
+import { Users, Info, Calendar, MessageSquare, Plus, UserPlus, Check, Camera } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
 import PostCard from '../components/PostCard';
 import Loader from '../components/Loader';
+import { resolveMediaUrl } from '../services/media';
 
 const GroupDetail = () => {
     const { id } = useParams();
@@ -18,6 +19,8 @@ const GroupDetail = () => {
     const [isPostModalOpen, setIsPostModalOpen] = useState(false);
     const [postText, setPostText] = useState('');
     const [posting, setPosting] = useState(false);
+    const [updatingImage, setUpdatingImage] = useState(false);
+    const imageInputRef = useRef(null);
 
     const fetchGroupData = useCallback(async () => {
         try {
@@ -70,6 +73,31 @@ const GroupDetail = () => {
     };
 
     const isMember = group?.members?.some(m => (m._id || m) === currentUser?._id);
+    const isCreator = Boolean(currentUser?._id && (group?.creator?._id || group?.creator) === currentUser._id);
+
+    const handleGroupImageChange = async (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        e.target.value = '';
+
+        const formData = new FormData();
+        formData.append('image', file);
+
+        setUpdatingImage(true);
+        try {
+            await api.put(`/groups/${id}/image`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            toast.success('Community avatar updated');
+            fetchGroupData();
+        } catch (error) {
+            toast.error(error.response?.data?.message || 'Failed to update community avatar');
+        } finally {
+            setUpdatingImage(false);
+        }
+    };
 
     if (loading) return <Loader fullPage />;
     if (!group) return <div className="p-20 text-center font-bold text-primary text-2xl">Group not found</div>;
@@ -78,13 +106,35 @@ const GroupDetail = () => {
         <div className="container mx-auto px-4 py-8 max-w-5xl">
             {/* Group Header */}
             <div className="glass-card overflow-hidden mb-8 border border-accent/10">
-                <div className="h-48 bg-gradient-to-r from-primary/20 via-button/20 to-accent/20 relative">
-                    <div className="absolute inset-0 opacity-30 bg-[radial-gradient(circle_at_50%_120%,rgba(255,213,220,0.5),transparent)]"></div>
-                </div>
+                <div className="h-48 bg-panel relative" />
                 <div className="p-8 -mt-16 relative">
                     <div className="flex flex-col md:flex-row items-end md:items-start gap-6">
-                        <div className="w-32 h-32 rounded-3xl bg-button shadow-2xl flex items-center justify-center text-ink border-8 border-surface shrink-0">
-                            <Users size={60} />
+                        <div className="relative w-32 h-32 rounded-3xl bg-button shadow-2xl flex items-center justify-center text-white border-8 border-surface shrink-0 overflow-hidden">
+                            {group.image ? (
+                                <img src={resolveMediaUrl(group.image)} alt={group.name} className="w-full h-full object-cover" />
+                            ) : (
+                                <Users size={60} />
+                            )}
+                            {isCreator && (
+                                <>
+                                    <input
+                                        ref={imageInputRef}
+                                        type="file"
+                                        accept="image/*"
+                                        className="hidden"
+                                        onChange={handleGroupImageChange}
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => imageInputRef.current?.click()}
+                                        disabled={updatingImage}
+                                        className="absolute bottom-2 right-2 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-black/55 text-white backdrop-blur-sm transition-colors hover:bg-black/70 disabled:opacity-60"
+                                        title="Update community avatar"
+                                    >
+                                        <Camera size={18} />
+                                    </button>
+                                </>
+                            )}
                         </div>
                         <div className="flex-1 text-center md:text-left mt-2">
                             <h1 className="text-4xl font-black text-ink tracking-tight mb-2">{group.name}</h1>
@@ -185,7 +235,7 @@ const GroupDetail = () => {
                             {group.members?.slice(0, 5).map(member => (
                                 <Link key={member._id} to={`/profile/${member._id}`} className="flex items-center gap-3 group">
                                     <img 
-                                        src={member.profilePic || `https://api.dicebear.com/7.x/thumbs/svg?seed=${member.name}`} 
+                                        src={resolveMediaUrl(member.profilePic) || `https://api.dicebear.com/7.x/thumbs/svg?seed=${member.name}`} 
                                         alt={member.name}
                                         className="w-10 h-10 rounded-xl object-cover ring-2 ring-transparent group-hover:ring-button transition-all"
                                     />

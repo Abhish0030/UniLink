@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../services/api';
-import { Users, Plus, Search, ChevronRight } from 'lucide-react';
+import { Users, Plus, Search, ChevronRight, Image as ImageIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'react-toastify';
 import Loader from '../components/Loader';
+import { resolveMediaUrl } from '../services/media';
 
 const Groups = () => {
     const [groups, setGroups] = useState([]);
@@ -12,7 +13,15 @@ const Groups = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [newGroup, setNewGroup] = useState({ name: '', description: '' });
+    const [groupImageFile, setGroupImageFile] = useState(null);
+    const [groupImagePreview, setGroupImagePreview] = useState('');
     const [creating, setCreating] = useState(false);
+
+    useEffect(() => () => {
+        if (groupImagePreview) {
+            URL.revokeObjectURL(groupImagePreview);
+        }
+    }, [groupImagePreview]);
 
     useEffect(() => {
         fetchGroups();
@@ -33,16 +42,45 @@ const Groups = () => {
         e.preventDefault();
         setCreating(true);
         try {
-            await api.post('/groups', newGroup);
+            const formData = new FormData();
+            formData.append('name', newGroup.name);
+            formData.append('description', newGroup.description);
+            if (groupImageFile) {
+                formData.append('image', groupImageFile);
+            }
+
+            await api.post('/groups', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
             toast.success('Group created successfully! 🎉');
             setIsCreateModalOpen(false);
             setNewGroup({ name: '', description: '' });
+            setGroupImageFile(null);
+            if (groupImagePreview) {
+                URL.revokeObjectURL(groupImagePreview);
+            }
+            setGroupImagePreview('');
             fetchGroups();
         } catch (error) {
             toast.error(error.response?.data?.message || 'Failed to create group');
         } finally {
             setCreating(false);
         }
+    };
+
+    const handleGroupImageSelect = (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        if (groupImagePreview) {
+            URL.revokeObjectURL(groupImagePreview);
+        }
+
+        setGroupImageFile(file);
+        setGroupImagePreview(URL.createObjectURL(file));
+        e.target.value = '';
     };
 
     const filteredGroups = groups.filter(g => 
@@ -89,10 +127,14 @@ const Groups = () => {
                             whileHover={{ y: -5 }}
                             className="glass-card overflow-hidden group border border-accent/10 hover:border-button/30 transition-all duration-300"
                         >
-                            <div className="h-24 bg-gradient-to-r from-primary/10 to-accent/10 group-hover:from-primary/20 group-hover:to-accent/20 transition-all duration-500" />
+                            <div className="h-24 bg-panel transition-all duration-500" />
                             <div className="p-6 -mt-12">
-                                <div className="w-16 h-16 rounded-2xl bg-button shadow-xl flex items-center justify-center text-ink mb-4 border-4 border-surface">
-                                    <Users size={30} />
+                                <div className="w-16 h-16 rounded-2xl bg-button shadow-xl flex items-center justify-center text-white mb-4 border-4 border-surface overflow-hidden">
+                                    {group.image ? (
+                                        <img src={resolveMediaUrl(group.image)} alt={group.name} className="w-full h-full object-cover" />
+                                    ) : (
+                                        <Users size={30} />
+                                    )}
                                 </div>
                                 <h3 className="text-xl font-black text-ink mb-2 group-hover:text-primary transition-colors">{group.name}</h3>
                                 <p className="text-ink/60 text-sm line-clamp-2 mb-4 h-10">
@@ -143,6 +185,25 @@ const Groups = () => {
                             <form onSubmit={handleCreateGroup} className="p-8">
                                 <h2 className="text-2xl font-black text-ink mb-6">Create Community</h2>
                                 <div className="space-y-4">
+                                    <div>
+                                        <label className="block text-xs font-black text-ink/60 uppercase tracking-widest mb-2 px-1">Community Avatar</label>
+                                        <label className="flex cursor-pointer items-center justify-center gap-3 rounded-2xl border border-dashed border-border bg-panel/45 px-6 py-5 text-sm font-bold text-ink/70 transition-colors hover:bg-panel/70">
+                                            <ImageIcon size={18} className="text-primary" />
+                                            {groupImageFile ? 'Change selected image' : 'Upload community avatar'}
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                className="hidden"
+                                                onChange={handleGroupImageSelect}
+                                            />
+                                        </label>
+                                        {groupImagePreview ? (
+                                            <div className="mt-4 flex items-center gap-4 rounded-2xl bg-surface px-4 py-3 border border-border/70">
+                                                <img src={groupImagePreview} alt="Community avatar preview" className="h-14 w-14 rounded-2xl object-cover" />
+                                                <p className="text-sm font-semibold text-ink/70 truncate">{groupImageFile?.name}</p>
+                                            </div>
+                                        ) : null}
+                                    </div>
                                     <div>
                                         <label className="block text-xs font-black text-ink/60 uppercase tracking-widest mb-2 px-1">Group Name</label>
                                         <input

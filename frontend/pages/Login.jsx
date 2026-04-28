@@ -46,7 +46,7 @@ const Login = () => {
     <div className="min-h-screen bg-background px-4 py-8 md:px-8">
       <div className="max-w-6xl mx-auto min-h-[calc(100vh-4rem)] grid lg:grid-cols-[1.05fr_0.95fr] gap-6">
         <section className="glass-card relative overflow-hidden p-8 sm:p-10 lg:p-14 flex flex-col justify-between min-h-[320px]">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(201,107,28,0.16),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(15,118,110,0.14),transparent_24%)] pointer-events-none" />
+          <div className="absolute inset-0 bg-panel/45 pointer-events-none" />
           <div className="relative">
             <div className="inline-flex items-center gap-2 rounded-full border border-accent/15 bg-accent/8 px-3 py-1.5 text-[11px] uppercase tracking-[0.2em] font-extrabold text-accent">
               <Sparkles size={14} />
