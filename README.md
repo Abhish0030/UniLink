@@ -5,7 +5,8 @@
 
 > *Built using MERN Stack with JWT Authentication & Tailwind CSS*
 
-![UniLink Banner](https://via.placeholder.com/1200x500?text=UniLink+Project)
+<img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/89156d93-dfc6-4fc0-a4cf-4d7858361d29" />
+
 
 ---
 
