@@ -6,7 +6,7 @@
 
 **Live App:** [https://uniink.netlify.app/](https://uniink.netlify.app/)
 
-<img src="docs/images/unilink-banner.png" alt="UniLink Banner" width="100%" />
+<img src="docs/images/unilink-dashboard-banner.png" alt="UniLink Banner" width="100%" />
 
 ---
 
